@@ -1,3 +1,5 @@
+package client;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
@@ -39,6 +41,7 @@ public class Client {
 					frame();
 				}
 			}
+			System.out.println();
 		}
 	}
 
@@ -47,10 +50,10 @@ public class Client {
 		String[] userinfo = userinfoInput();
 		socketWrite("username=" + userinfo[0] + "&password=" + userinfo[1]);
 		String result = socketRead();
-		if (!result.equals("true"))
-			System.out.println("用户名或密码输入有误");
-		else {
+		if (result.equals("登陆成功"))
 			System.out.println("欢迎您" + userinfo[0] + "成功登录");
+		else {
+			System.out.println(result);
 		}
 	}
 
@@ -59,14 +62,16 @@ public class Client {
 		socketWrite("register");
 		String[] userinfo = userinfoInput();
 		socketWrite("username=" + userinfo[0] + "&password=" + userinfo[1]);
-		if(socketRead().equals("true"))
+		String result = socketRead();
+		if(result.equals("注册成功"))
 			System.out.println("欢迎您成功注册");
 		else
-			System.out.println("用户名已存在或用户名密码格式有误）");
+			System.out.println(result);
 	}
 
 	private static void exit() {
 		try{
+			socketWrite("exit");
 			socket.close();
 			scanner.close();
 		}catch (IOException ioe){
